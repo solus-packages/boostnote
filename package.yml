@@ -1,0 +1,46 @@
+name       : boostnote
+version    : 0.11.4
+release    : 1
+source     :
+    - https://github.com/BoostIO/Boostnote/archive/v0.11.4.tar.gz : 99b7f5403bfd78458bdbb5c80c605c33621a87b9e20634af6fa982c746cc914a
+license    : GPL-3.0-or-later
+component  : office.notes
+networking : yes
+summary    : The note-taking app for programmers that focuses on markdown, snippets, and customizability.
+description: |
+    The note-taking app for programmers that focuses on markdown, snippets, and customizability.
+builddeps  :
+    - pkgconfig(alsa)
+    - pkgconfig(cairo)
+    - pkgconfig(fontconfig)
+    - pkgconfig(gconf-2.0)
+    - pkgconfig(gtk+-2.0)
+    - pkgconfig(krb5)
+    - pkgconfig(libsecret-1)
+    - pkgconfig(pango)
+    - pkgconfig(xcomposite)
+    - pkgconfig(xdamage)
+    - pkgconfig(xkbfile)
+    - pkgconfig(xscrnsaver)
+    - pkgconfig(xtst)
+    - cups-devel
+    - git
+    - nodejs
+setup      : |
+    %patch -p1 < $pkgfiles/warning-fix.patch
+    %patch -p1 < $pkgfiles/remove-analytics.patch
+
+    mkdir -p grunt-install
+    npm install --prefix grunt-install grunt-cli
+build      : |
+    npm install --no-optional
+    grunt-install/node_modules/grunt-cli/bin/grunt pre-build
+install    : |
+    install -dm00755 $installdir/usr/share/boostnote
+    cp -R $workdir/dist/Boostnote-linux-x64/* $installdir/usr/share/boostnote
+
+    install -dm00755 $installdir/usr/bin
+    ln -s /usr/share/boostnote/Boostnote $installdir/usr/bin/boostnote
+
+    install -D -m00644 resources/app.png $installdir/usr/share/pixmaps/boostnote.png
+    install -D -m00644 $pkgfiles/boostnote.desktop $installdir/usr/share/applications/boostnote.desktop
