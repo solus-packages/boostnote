@@ -1,8 +1,8 @@
 name       : boostnote
-version    : 0.11.8
-release    : 3
+version    : 0.11.12
+release    : 4
 source     :
-    - https://github.com/BoostIO/Boostnote/archive/v0.11.8.tar.gz : faca88c7daabd550983bc18496aebc3af3f1ad558a17045c780f6c3fa63ccc7f
+    - https://github.com/BoostIO/Boostnote/archive/v0.11.12.tar.gz : e329d2afe67f7e3d0b8da31b903c4c28a1f61118424692bcfd4354a414b8c9d9
 license    : GPL-3.0-or-later
 component  : office.notes
 networking : yes
@@ -29,8 +29,7 @@ builddeps  :
     - nodejs
 setup      : |
     %patch -p1 < $pkgfiles/remove-analytics.patch
-    %patch -p1 < $pkgfiles/markdown-fix.patch
-
+    
     mkdir -p grunt-install
     npm install --prefix grunt-install grunt-cli
 build      : |
@@ -43,5 +42,5 @@ install    : |
     install -dm00755 $installdir/usr/bin
     ln -s /usr/share/boostnote/Boostnote $installdir/usr/bin/boostnote
 
-    install -D -m00644 resources/app.png $installdir/usr/share/pixmaps/boostnote.png
-    install -D -m00644 $pkgfiles/boostnote.desktop $installdir/usr/share/applications/boostnote.desktop
+    install -Dm00644 resources/app.png $installdir/usr/share/pixmaps/boostnote.png
+    install -Dm00644 $pkgfiles/boostnote.desktop $installdir/usr/share/applications/boostnote.desktop
