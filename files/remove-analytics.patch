@@ -1,106 +1,137 @@
-diff -ura a/browser/lib/newNote.js b/browser/lib/newNote.js
---- a/browser/lib/newNote.js	2018-12-17 06:56:16.000000000 +0100
-+++ b/browser/lib/newNote.js	2018-12-18 09:14:38.440189997 +0100
-@@ -1,11 +1,8 @@
+From 9798ac6d5c447bee474f7e846a7ab4ecb00df4fd Mon Sep 17 00:00:00 2001
+From: "F. von Gellhorn" <flinux@vongellhorn.ch>
+Date: Mon, 28 Jan 2019 12:50:43 +0100
+Subject: [PATCH 1/1] Fix analytics
+
+---
+ browser/lib/newNote.js                        |  8 +--
+ browser/main/Detail/MarkdownNoteDetail.js     |  6 +-
+ browser/main/Detail/SnippetNoteDetail.js      | 13 ++---
+ browser/main/Detail/TagSelect.js              |  2 -
+ browser/main/Main.js                          |  5 --
+ browser/main/NoteList/index.js                |  5 +-
+ browser/main/lib/ConfigManager.js             |  2 +-
+ browser/main/modals/CreateFolderModal.js      |  2 -
+ .../main/modals/PreferencesModal/InfoTab.js   | 58 -------------------
+ package.json                                  |  2 -
+ 10 files changed, 12 insertions(+), 91 deletions(-)
+
+diff --git a/browser/lib/newNote.js b/browser/lib/newNote.js
+index d8ef196..45b9a7f 100644
+--- a/browser/lib/newNote.js
++++ b/browser/lib/newNote.js
+@@ -1,11 +1,10 @@
  import { hashHistory } from 'react-router'
  import dataApi from 'browser/main/lib/dataApi'
  import ee from 'browser/main/lib/eventEmitter'
 -import AwsMobileAnalyticsConfig from 'browser/main/lib/AwsMobileAnalyticsConfig'
++
  
  export function createMarkdownNote (storage, folder, dispatch, location, params, config) {
 -  AwsMobileAnalyticsConfig.recordDynamicCustomEvent('ADD_MARKDOWN')
 -  AwsMobileAnalyticsConfig.recordDynamicCustomEvent('ADD_ALLNOTE')
++
  
    let tags = []
    if (config.ui.tagNewNoteWithFilteringTags && location.pathname.match(/\/tags/)) {
-@@ -37,8 +34,6 @@
+@@ -38,8 +37,7 @@ export function createMarkdownNote (storage, folder, dispatch, location, params,
  }
  
  export function createSnippetNote (storage, folder, dispatch, location, params, config) {
 -  AwsMobileAnalyticsConfig.recordDynamicCustomEvent('ADD_SNIPPET')
 -  AwsMobileAnalyticsConfig.recordDynamicCustomEvent('ADD_ALLNOTE')
++
  
    let tags = []
    if (config.ui.tagNewNoteWithFilteringTags && location.pathname.match(/\/tags/)) {
-diff -ura a/browser/main/Detail/MarkdownNoteDetail.js b/browser/main/Detail/MarkdownNoteDetail.js
---- a/browser/main/Detail/MarkdownNoteDetail.js	2018-12-17 06:56:16.000000000 +0100
-+++ b/browser/main/Detail/MarkdownNoteDetail.js	2018-12-18 09:15:07.053824657 +0100
-@@ -15,7 +15,6 @@
+diff --git a/browser/main/Detail/MarkdownNoteDetail.js b/browser/main/Detail/MarkdownNoteDetail.js
+index 040df60..9118bb5 100755
+--- a/browser/main/Detail/MarkdownNoteDetail.js
++++ b/browser/main/Detail/MarkdownNoteDetail.js
+@@ -15,7 +15,7 @@ import markdown from 'browser/lib/markdownTextHelper'
  import StatusBar from '../StatusBar'
  import _ from 'lodash'
  import { findNoteTitle } from 'browser/lib/findNoteTitle'
 -import AwsMobileAnalyticsConfig from 'browser/main/lib/AwsMobileAnalyticsConfig'
++
  import ConfigManager from 'browser/main/lib/ConfigManager'
  import TrashButton from './TrashButton'
  import FullscreenButton from './FullscreenButton'
-@@ -124,7 +123,6 @@
+@@ -130,7 +130,7 @@ class MarkdownNoteDetail extends React.Component {
            type: 'UPDATE_NOTE',
            note: note
          })
 -        AwsMobileAnalyticsConfig.recordDynamicCustomEvent('EDIT_NOTE')
++
        })
    }
  
-@@ -163,7 +161,6 @@
+@@ -169,7 +169,7 @@ class MarkdownNoteDetail extends React.Component {
  
    handleStarButtonClick (e) {
      const { note } = this.state
 -    if (!note.isStarred) AwsMobileAnalyticsConfig.recordDynamicCustomEvent('ADD_STAR')
++
  
      note.isStarred = !note.isStarred
  
-diff -ura a/browser/main/Detail/SnippetNoteDetail.js b/browser/main/Detail/SnippetNoteDetail.js
---- a/browser/main/Detail/SnippetNoteDetail.js	2018-12-17 06:56:16.000000000 +0100
-+++ b/browser/main/Detail/SnippetNoteDetail.js	2018-12-18 09:15:46.964251990 +0100
-@@ -19,7 +19,6 @@
+diff --git a/browser/main/Detail/SnippetNoteDetail.js b/browser/main/Detail/SnippetNoteDetail.js
+index 11d8ac2..6833bf5 100644
+--- a/browser/main/Detail/SnippetNoteDetail.js
++++ b/browser/main/Detail/SnippetNoteDetail.js
+@@ -19,7 +19,6 @@ import ConfigManager from 'browser/main/lib/ConfigManager'
  import _ from 'lodash'
  import {findNoteTitle} from 'browser/lib/findNoteTitle'
  import convertModeName from 'browser/lib/convertModeName'
 -import AwsMobileAnalyticsConfig from 'browser/main/lib/AwsMobileAnalyticsConfig'
+ import FullscreenButton from './FullscreenButton'
  import TrashButton from './TrashButton'
  import RestoreButton from './RestoreButton'
- import PermanentDeleteButton from './PermanentDeleteButton'
-@@ -140,7 +139,6 @@
+@@ -142,7 +141,7 @@ class SnippetNoteDetail extends React.Component {
            type: 'UPDATE_NOTE',
            note: note
          })
 -        AwsMobileAnalyticsConfig.recordDynamicCustomEvent('EDIT_NOTE')
++
        })
    }
  
-@@ -179,7 +177,6 @@
+@@ -181,7 +180,7 @@ class SnippetNoteDetail extends React.Component {
  
    handleStarButtonClick (e) {
      const { note } = this.state
 -    if (!note.isStarred) AwsMobileAnalyticsConfig.recordDynamicCustomEvent('ADD_STAR')
++
  
      note.isStarred = !note.isStarred
  
-@@ -375,9 +372,6 @@
+@@ -377,9 +376,7 @@ class SnippetNoteDetail extends React.Component {
      const mode = syntax != null ? syntax.name : null
      if (mode != null) {
        snippets[index].mode = mode
 -      AwsMobileAnalyticsConfig.recordDynamicCustomEvent('SNIPPET_LANG', {
 -        name: mode
 -      })
++ 
      }
      this.setState(state => ({note: Object.assign(state.note, {snippets: snippets})}))
  
-@@ -399,10 +393,6 @@
-       }), () => {
+@@ -402,9 +399,7 @@ class SnippetNoteDetail extends React.Component {
          this.save()
        })
--
+ 
 -      AwsMobileAnalyticsConfig.recordDynamicCustomEvent('SELECT_LANG', {
 -        name
 -      })
++
      }
    }
  
-diff -ura a/browser/main/Detail/TagSelect.js b/browser/main/Detail/TagSelect.js
---- a/browser/main/Detail/TagSelect.js	2018-12-17 06:56:16.000000000 +0100
-+++ b/browser/main/Detail/TagSelect.js	2018-12-18 09:16:00.454354015 +0100
-@@ -3,7 +3,6 @@
+diff --git a/browser/main/Detail/TagSelect.js b/browser/main/Detail/TagSelect.js
+index e3d9a56..c354b82 100644
+--- a/browser/main/Detail/TagSelect.js
++++ b/browser/main/Detail/TagSelect.js
+@@ -4,7 +4,6 @@ import invertColor from 'invert-color'
  import CSSModules from 'browser/lib/CSSModules'
  import styles from './TagSelect.styl'
  import _ from 'lodash'
@@ -108,7 +139,7 @@ diff -ura a/browser/main/Detail/TagSelect.js b/browser/main/Detail/TagSelect.js
  import i18n from 'browser/lib/i18n'
  import ee from 'browser/main/lib/eventEmitter'
  import Autosuggest from 'react-autosuggest'
-@@ -27,7 +26,6 @@
+@@ -28,7 +27,6 @@ class TagSelect extends React.Component {
    }
  
    addNewTag (newTag) {
@@ -116,10 +147,11 @@ diff -ura a/browser/main/Detail/TagSelect.js b/browser/main/Detail/TagSelect.js
  
      newTag = newTag.trim().replace(/ +/g, '_')
      if (newTag.charAt(0) === '#') {
-diff -ura a/browser/main/Main.js b/browser/main/Main.js
---- a/browser/main/Main.js	2018-12-17 06:56:16.000000000 +0100
-+++ b/browser/main/Main.js	2018-12-18 09:16:21.980893940 +0100
-@@ -10,7 +10,6 @@
+diff --git a/browser/main/Main.js b/browser/main/Main.js
+index 26fc837..c9ac935 100644
+--- a/browser/main/Main.js
++++ b/browser/main/Main.js
+@@ -10,7 +10,6 @@ import Detail from './Detail'
  import dataApi from 'browser/main/lib/dataApi'
  import _ from 'lodash'
  import ConfigManager from 'browser/main/lib/ConfigManager'
@@ -127,7 +159,7 @@ diff -ura a/browser/main/Main.js b/browser/main/Main.js
  import eventEmitter from 'browser/main/lib/eventEmitter'
  import { hashHistory } from 'react-router'
  import store from 'browser/main/store'
-@@ -25,10 +24,6 @@
+@@ -25,10 +24,6 @@ class Main extends React.Component {
    constructor (props) {
      super(props)
  
@@ -138,10 +170,54 @@ diff -ura a/browser/main/Main.js b/browser/main/Main.js
      const { config } = props
  
      this.state = {
-diff -ura a/browser/main/modals/CreateFolderModal.js b/browser/main/modals/CreateFolderModal.js
---- a/browser/main/modals/CreateFolderModal.js	2018-12-17 06:56:16.000000000 +0100
-+++ b/browser/main/modals/CreateFolderModal.js	2018-12-18 09:16:35.717493677 +0100
-@@ -6,7 +6,6 @@
+diff --git a/browser/main/NoteList/index.js b/browser/main/NoteList/index.js
+index 33a0adf..be32b96 100644
+--- a/browser/main/NoteList/index.js
++++ b/browser/main/NoteList/index.js
+@@ -16,7 +16,6 @@ import fs from 'fs'
+ import path from 'path'
+ import { hashHistory } from 'react-router'
+ import copy from 'copy-to-clipboard'
+-import AwsMobileAnalyticsConfig from 'browser/main/lib/AwsMobileAnalyticsConfig'
+ import Markdown from '../../lib/markdown'
+ import i18n from 'browser/lib/i18n'
+ import { confirmDeleteNote } from 'browser/lib/confirmDeleteNote'
+@@ -689,7 +688,7 @@ class NoteList extends React.Component {
+             note: newNote
+           })
+         })
+-        AwsMobileAnalyticsConfig.recordDynamicCustomEvent('EDIT_NOTE')
++
+       })
+       .then(() => ee.emit('list:next'))
+       .catch((err) => {
+@@ -708,8 +707,6 @@ class NoteList extends React.Component {
+     const firstNote = selectedNotes[0]
+     const eventName = firstNote.type === 'MARKDOWN_NOTE' ? 'ADD_MARKDOWN' : 'ADD_SNIPPET'
+ 
+-    AwsMobileAnalyticsConfig.recordDynamicCustomEvent(eventName)
+-    AwsMobileAnalyticsConfig.recordDynamicCustomEvent('ADD_ALLNOTE')
+     dataApi
+       .createNote(storage.key, {
+         type: firstNote.type,
+diff --git a/browser/main/lib/ConfigManager.js b/browser/main/lib/ConfigManager.js
+index 8a89c9a..bf13bbb 100644
+--- a/browser/main/lib/ConfigManager.js
++++ b/browser/main/lib/ConfigManager.js
+@@ -21,7 +21,7 @@ export const DEFAULT_CONFIG = {
+   },
+   sortTagsBy: 'ALPHABETICAL', // 'ALPHABETICAL', 'COUNTER'
+   listStyle: 'DEFAULT', // 'DEFAULT', 'SMALL'
+-  amaEnabled: true,
++  amaEnabled: false,
+   hotkey: {
+     toggleMain: OSX ? 'Command + Alt + L' : 'Super + Alt + E',
+     toggleMode: OSX ? 'Command + Alt + M' : 'Ctrl + M',
+diff --git a/browser/main/modals/CreateFolderModal.js b/browser/main/modals/CreateFolderModal.js
+index b061b0f..338fcf8 100644
+--- a/browser/main/modals/CreateFolderModal.js
++++ b/browser/main/modals/CreateFolderModal.js
+@@ -6,7 +6,6 @@ import dataApi from 'browser/main/lib/dataApi'
  import store from 'browser/main/store'
  import consts from 'browser/lib/consts'
  import ModalEscButton from 'browser/components/ModalEscButton'
@@ -149,7 +225,7 @@ diff -ura a/browser/main/modals/CreateFolderModal.js b/browser/main/modals/Creat
  import i18n from 'browser/lib/i18n'
  
  class CreateFolderModal extends React.Component {
-@@ -51,7 +50,6 @@
+@@ -51,7 +50,6 @@ class CreateFolderModal extends React.Component {
    }
  
    confirm () {
@@ -157,10 +233,11 @@ diff -ura a/browser/main/modals/CreateFolderModal.js b/browser/main/modals/Creat
      if (this.state.name.trim().length > 0) {
        const { storage } = this.props
        const input = {
-diff -ura a/browser/main/modals/PreferencesModal/InfoTab.js b/browser/main/modals/PreferencesModal/InfoTab.js
---- a/browser/main/modals/PreferencesModal/InfoTab.js	2018-12-17 06:56:16.000000000 +0100
-+++ b/browser/main/modals/PreferencesModal/InfoTab.js	2018-12-18 09:17:14.424024793 +0100
-@@ -3,7 +3,6 @@
+diff --git a/browser/main/modals/PreferencesModal/InfoTab.js b/browser/main/modals/PreferencesModal/InfoTab.js
+index dafabb0..6931dff 100644
+--- a/browser/main/modals/PreferencesModal/InfoTab.js
++++ b/browser/main/modals/PreferencesModal/InfoTab.js
+@@ -3,7 +3,6 @@ import CSSModules from 'browser/lib/CSSModules'
  import styles from './InfoTab.styl'
  import ConfigManager from 'browser/main/lib/ConfigManager'
  import store from 'browser/main/store'
@@ -168,7 +245,7 @@ diff -ura a/browser/main/modals/PreferencesModal/InfoTab.js b/browser/main/modal
  import _ from 'lodash'
  import i18n from 'browser/lib/i18n'
  
-@@ -25,47 +24,6 @@
+@@ -25,47 +24,6 @@ class InfoTab extends React.Component {
      e.preventDefault()
    }
  
@@ -216,11 +293,10 @@ diff -ura a/browser/main/modals/PreferencesModal/InfoTab.js b/browser/main/modal
    render () {
      return (
        <div styleName='root'>
-@@ -135,23 +93,6 @@
-             {i18n.__('License: GPL v3')}
+@@ -141,22 +99,6 @@ class InfoTab extends React.Component {
            </li>
          </ul>
--
+ 
 -        <hr styleName='separate-line' />
 -
 -        <div styleName='policy'>{i18n.__('Analytics')}</div>
@@ -240,38 +316,11 @@ diff -ura a/browser/main/modals/PreferencesModal/InfoTab.js b/browser/main/modal
        </div>
      )
    }
-diff -ura a/browser/main/NoteList/index.js b/browser/main/NoteList/index.js
---- a/browser/main/NoteList/index.js	2018-12-17 06:56:16.000000000 +0100
-+++ b/browser/main/NoteList/index.js	2018-12-18 09:17:36.037313386 +0100
-@@ -17,7 +17,6 @@
- import path from 'path'
- import { hashHistory } from 'react-router'
- import copy from 'copy-to-clipboard'
--import AwsMobileAnalyticsConfig from 'browser/main/lib/AwsMobileAnalyticsConfig'
- import Markdown from '../../lib/markdown'
- import i18n from 'browser/lib/i18n'
- import { confirmDeleteNote } from 'browser/lib/confirmDeleteNote'
-@@ -686,7 +685,6 @@
-             note: newNote
-           })
-         })
--        AwsMobileAnalyticsConfig.recordDynamicCustomEvent('EDIT_NOTE')
-       })
-       .catch((err) => {
-         console.error('Notes could not go to trash: ' + err)
-@@ -704,8 +702,6 @@
-     const firstNote = selectedNotes[0]
-     const eventName = firstNote.type === 'MARKDOWN_NOTE' ? 'ADD_MARKDOWN' : 'ADD_SNIPPET'
- 
--    AwsMobileAnalyticsConfig.recordDynamicCustomEvent(eventName)
--    AwsMobileAnalyticsConfig.recordDynamicCustomEvent('ADD_ALLNOTE')
-     dataApi
-       .createNote(storage.key, {
-         type: firstNote.type,
-diff -ura a/package.json b/package.json
---- a/package.json	2018-12-17 06:56:16.000000000 +0100
-+++ b/package.json	2018-12-18 09:17:47.943964022 +0100
-@@ -52,8 +52,6 @@
+diff --git a/package.json b/package.json
+index 62a0ced..088d576 100644
+--- a/package.json
++++ b/package.json
+@@ -53,8 +53,6 @@
      "@rokt33r/markdown-it-math": "^4.0.1",
      "@rokt33r/season": "^5.3.0",
      "@susisu/mte-kernel": "^2.0.0",
@@ -280,3 +329,6 @@ diff -ura a/package.json b/package.json
      "chart.js": "^2.7.2",
      "codemirror": "^5.40.2",
      "codemirror-mode-elixir": "^1.1.1",
+-- 
+2.20.1
+

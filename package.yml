@@ -1,8 +1,8 @@
 name       : boostnote
-version    : 0.11.12
-release    : 4
+version    : 0.11.13
+release    : 5
 source     :
-    - https://github.com/BoostIO/Boostnote/archive/v0.11.12.tar.gz : e329d2afe67f7e3d0b8da31b903c4c28a1f61118424692bcfd4354a414b8c9d9
+    - https://github.com/BoostIO/Boostnote/archive/v0.11.13.tar.gz : a8625f3a68091c7db5158ad122c61e902b522393ad9b8bce2b9f4d439c9bdd92
 license    : GPL-3.0-or-later
 component  : office.notes
 networking : yes
@@ -29,7 +29,7 @@ builddeps  :
     - nodejs
 setup      : |
     %patch -p1 < $pkgfiles/remove-analytics.patch
-    
+
     mkdir -p grunt-install
     npm install --prefix grunt-install grunt-cli
 build      : |
