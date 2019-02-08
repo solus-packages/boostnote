@@ -1,8 +1,8 @@
 name       : boostnote
-version    : 0.11.13
-release    : 5
+version    : 0.11.15
+release    : 6
 source     :
-    - https://github.com/BoostIO/Boostnote/archive/v0.11.13.tar.gz : a8625f3a68091c7db5158ad122c61e902b522393ad9b8bce2b9f4d439c9bdd92
+    - https://github.com/BoostIO/Boostnote/archive/v0.11.15.tar.gz : 179c73f8355ba507e0642c633a1616aabb8f5b555a61c4cbb9c61eb3e7d9ff71
 license    : GPL-3.0-or-later
 component  : office.notes
 networking : yes
