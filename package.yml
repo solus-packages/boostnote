@@ -1,12 +1,13 @@
 name       : boostnote
 version    : 0.11.15
-release    : 6
+release    : 7
 source     :
     - https://github.com/BoostIO/Boostnote/archive/v0.11.15.tar.gz : 179c73f8355ba507e0642c633a1616aabb8f5b555a61c4cbb9c61eb3e7d9ff71
 license    : GPL-3.0-or-later
 component  : office.notes
 networking : yes
-summary    : The note-taking app for programmers that focuses on markdown, snippets, and customizability
+summary    : The note-taking app for programmers that focuses on markdown, snippets,
+    and customizability
 description: |
     The note-taking app for programmers that focuses on markdown, snippets, and customizability.
 builddeps  :
