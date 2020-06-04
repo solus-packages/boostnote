@@ -1,8 +1,8 @@
 name       : boostnote
-version    : 0.11.15
-release    : 7
+version    : 0.15.3
+release    : 8
 source     :
-    - https://github.com/BoostIO/Boostnote/archive/v0.11.15.tar.gz : 179c73f8355ba507e0642c633a1616aabb8f5b555a61c4cbb9c61eb3e7d9ff71
+    - https://github.com/BoostIO/Boostnote/archive/v0.15.3.tar.gz : ed8b77652ab8f937d0d537f141bb728b6ca4523d962fd187669d26b53c4f6fd5
 license    : GPL-3.0-or-later
 component  : office.notes
 networking : yes
@@ -28,13 +28,16 @@ builddeps  :
     - cups-devel
     - git
     - nodejs
+    - yarn
+rundeps    :
+    - ffmpeg-chromium
 setup      : |
     %patch -p1 < $pkgfiles/remove-analytics.patch
 
     mkdir -p grunt-install
     npm install --prefix grunt-install grunt-cli
 build      : |
-    npm install --no-optional
+    yarn
     grunt-install/node_modules/grunt-cli/bin/grunt pre-build
 install    : |
     install -dm00755 $installdir/usr/share/boostnote
